@@ -125,7 +125,7 @@ export default function EnhancedTable({ search }) {
     useEffect(() => {
         if (search !== '') {
             console.log(search)
-            const filter = rows.filter((row) => row.cd_cliente.includes(search));
+            const filter = rows.filter((row) => row.cd_cliente.includes(search) || row.nm_sector.includes(search));
 
             setFilteredRows(filter)
         } else {
