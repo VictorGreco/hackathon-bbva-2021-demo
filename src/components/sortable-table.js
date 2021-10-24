@@ -112,7 +112,7 @@ export default function EnhancedTable({ search }) {
 
     useEffect(() => {
         axios.get('https://hackathon-bbva-21-calc-verde.herokuapp.com/company')
-            .then(({data }) => {
+            .then(({ data }) => {
 
                 setRows(data);
             })
@@ -132,7 +132,7 @@ export default function EnhancedTable({ search }) {
             setFilteredRows(rows)
         }
 
-    }, [search])
+    }, [search, rows])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
