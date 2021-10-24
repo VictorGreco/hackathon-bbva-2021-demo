@@ -47,7 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({ setSearch }) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -68,6 +68,9 @@ export default function PrimarySearchAppBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onChange={(event) => {
+                  setSearch(event.target.value)
+              }}
             />
           </Search>
         </Toolbar>
