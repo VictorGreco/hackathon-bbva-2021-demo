@@ -29,8 +29,6 @@ function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -45,41 +43,17 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'empresa',
+        id: ' cd_cliente',
         numeric: false,
         disablePadding: true,
-        label: 'Empresa',
+        label: ' cd_cliente',
     },
     {
-        id: 'sector',
+        id: 'nm_sector',
         numeric: true,
         disablePadding: false,
-        label: 'Sector',
-    },
-    {
-        id: 'producto',
-        numeric: true,
-        disablePadding: false,
-        label: 'Emisiones por producto',
-    },
-    {
-        id: 'gestion',
-        numeric: true,
-        disablePadding: false,
-        label: 'Emisiones por gestión',
-    },
-    {
-        id: 'empleados',
-        numeric: true,
-        disablePadding: false,
-        label: 'Emisiones por empleados',
-    },
-    {
-        id: 'huella',
-        numeric: true,
-        disablePadding: false,
-        label: 'Huella de CO2',
-    },
+        label: 'nm_sector',
+    }
 ];
 
 function EnhancedTableHead(props) {
@@ -131,7 +105,7 @@ EnhancedTableHead.propTypes = {
 
 export default function EnhancedTable({ search }) {
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('sector');
+    const [orderBy, setOrderBy] = React.useState('nm_sector');
     const [selected, setSelected] = React.useState([]);
     const [rows, setRows] = React.useState([]);
     const [filteredRows, setFilteredRows] = React.useState([]);
@@ -151,7 +125,7 @@ export default function EnhancedTable({ search }) {
     useEffect(() => {
         if (search !== '') {
             console.log(search)
-            const filter = rows.filter((row) => row.empresa.includes(search));
+            const filter = rows.filter((row) => row.cd_cliente.includes(search));
 
             setFilteredRows(filter)
         } else {
@@ -168,19 +142,19 @@ export default function EnhancedTable({ search }) {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = filteredRows.map((n) => n.empresa);
+            const newSelecteds = filteredRows.map((n) => n.cd_cliente);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event, empresa) => {
-        const selectedIndex = selected.indexOf(empresa);
+    const handleClick = (event, cd_cliente) => {
+        const selectedIndex = selected.indexOf(cd_cliente);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, empresa);
+            newSelected = newSelected.concat(selected, cd_cliente);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -195,7 +169,7 @@ export default function EnhancedTable({ search }) {
         setSelected(newSelected);
     };
 
-    const isSelected = (empresa) => selected.indexOf(empresa) !== -1;
+    const isSelected = (cd_cliente) => selected.indexOf(cd_cliente) !== -1;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -217,17 +191,17 @@ export default function EnhancedTable({ search }) {
                         <TableBody>
                             {stableSort(filteredRows, getComparator(order, orderBy))
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.empresa);
+                                    const isItemSelected = isSelected(row.cd_cliente);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.empresa)}
+                                            onClick={(event) => handleClick(event, row.cd_cliente)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.empresa}
+                                            key={row.cd_cliente}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -245,13 +219,10 @@ export default function EnhancedTable({ search }) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                {row.empresa}
+                                                {row.cd_cliente}
                                             </TableCell>
-                                            <TableCell align="right">{row.sector}</TableCell>
+                                            <TableCell align="right">{row.nm_sector}</TableCell>
                                             <TableCell align="right">{row.producto}</TableCell>
-                                            <TableCell align="right">{row.gestion}</TableCell>
-                                            <TableCell align="right">{row.empleados}</TableCell>
-                                            <TableCell align="right">{row.huella}</TableCell>
                                         </TableRow>
                                     );
                                 })}
