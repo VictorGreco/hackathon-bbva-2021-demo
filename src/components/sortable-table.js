@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
+import { useHistory } from "react-router-dom";
 import { visuallyHidden } from '@mui/utils';
 
 function descendingComparator(a, b, orderBy) {
@@ -46,13 +46,37 @@ const headCells = [
         id: ' cd_cliente',
         numeric: false,
         disablePadding: true,
-        label: ' cd_cliente',
+        label: ' Código cliente',
     },
     {
         id: 'nm_sector',
         numeric: true,
         disablePadding: false,
-        label: 'nm_sector',
+        label: 'Nombre del sector',
+    },
+    {
+        id: 'emisiones_directas',
+        numeric: true,
+        disablePadding: false,
+        label: 'Emisiones directas',
+    },
+    {
+        id: 'emisiones_indirectas',
+        numeric: true,
+        disablePadding: false,
+        label: 'Emisiones indirectas',
+    },
+    {
+        id: 'otras_indirectas',
+        numeric: true,
+        disablePadding: false,
+        label: 'Otras indirectas',
+    },
+    {
+        id: 'emisiones_totales',
+        numeric: true,
+        disablePadding: false,
+        label: 'Emisiones totales',
     }
 ];
 
@@ -106,9 +130,9 @@ EnhancedTableHead.propTypes = {
 export default function EnhancedTable({ search }) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('nm_sector');
-    const [selected, setSelected] = React.useState([]);
     const [rows, setRows] = React.useState([]);
     const [filteredRows, setFilteredRows] = React.useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         axios.get('https://hackathon-bbva-21-calc-verde.herokuapp.com/company')
@@ -125,7 +149,7 @@ export default function EnhancedTable({ search }) {
     useEffect(() => {
         if (search !== '') {
             console.log(search)
-            const filter = rows.filter((row) => row.cd_cliente.includes(search) || row.nm_sector.includes(search));
+            const filter = rows.filter((row) => row.cd_cliente.includes(search) || row.nm_sector.toLowerCase().includes(search));
 
             setFilteredRows(filter)
         } else {
@@ -140,36 +164,10 @@ export default function EnhancedTable({ search }) {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = filteredRows.map((n) => n.cd_cliente);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
-
     const handleClick = (event, cd_cliente) => {
-        const selectedIndex = selected.indexOf(cd_cliente);
-        let newSelected = [];
 
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, cd_cliente);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
+        history.push(`/company/${cd_cliente}`);
     };
-
-    const isSelected = (cd_cliente) => selected.indexOf(cd_cliente) !== -1;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -181,48 +179,30 @@ export default function EnhancedTable({ search }) {
                         size={'medium'}
                     >
                         <EnhancedTableHead
-                            numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={filteredRows.length}
                         />
                         <TableBody>
                             {stableSort(filteredRows, getComparator(order, orderBy))
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.cd_cliente);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
                                             onClick={(event) => handleClick(event, row.cd_cliente)}
                                             role="checkbox"
-                                            aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.cd_cliente}
-                                            selected={isItemSelected}
                                         >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
-                                            >
-                                                {row.cd_cliente}
-                                            </TableCell>
+                                            <TableCell padding="checkbox"></TableCell>
+                                            <TableCell component="th" scope="row">{row.cd_cliente}</TableCell>
                                             <TableCell align="right">{row.nm_sector}</TableCell>
-                                            <TableCell align="right">{row.producto}</TableCell>
+                                            <TableCell align="right">{row.emisiones_directas}</TableCell>
+                                            <TableCell align="right">{row.emisiones_indirectas}</TableCell>
+                                            <TableCell align="right">{row.otras_indirectas}</TableCell>
+                                            <TableCell align="right">{row.emisiones_totales}</TableCell>
                                         </TableRow>
                                     );
                                 })}

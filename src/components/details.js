@@ -4,6 +4,7 @@ import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import { makeStyles } from '@mui/styles';
 import ColorTabs from './tabs';
+import ProgressBar from './progress-bar';
 
 const useStyles = makeStyles({
     tabsWrapper: {
@@ -13,7 +14,9 @@ const useStyles = makeStyles({
         backgroundColor: '#FFFFFF',
         margin: '0px 100px 50px 100px',
         padding: '25px 50px 50px 50px',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        display: 'flex',
+        alignItems: 'center',
     },
     title: {
         fontSize: '1rem',
@@ -31,6 +34,24 @@ const useStyles = makeStyles({
         fontSize: '1rem',
         fontFamily: 'Open Sans',
         color: '#CCCCCC',
+    },
+    totalScore: {
+        fontSize: '4rem',
+        fontFamily: 'Open Sans',
+        fontWeight: 'bold',
+        color: '#CCCCCC',
+    },
+    red: {
+        color: 'red',
+    },
+    orange: {
+        color: 'orange'
+    },
+    green: {
+        color: 'green'
+    },
+    alignCentre: {
+        textAlign: 'center'
     }
 });
 
@@ -57,7 +78,7 @@ function Details() {
             </Grid>
             <Grid item xs={12}>
                 <Grid className={classes.mainWrapper}>
-                    <Grid item xs={6}>
+                    <Grid item xs={7}>
                         <p className={classes.title}>Vista general</p>
                         <Grid container>
                             <Grid item xs={12}>
@@ -114,7 +135,25 @@ function Details() {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={6}></Grid>
+                    <Grid item xs={5}>
+                        <p className={classes.metricTitle}>Calificación energética</p>
+                        <p
+                            className={`${classes.totalScore} ${60 < 50 ?
+                                classes.red :
+                                60 < 100 ?
+                                    classes.orange :
+                                    classes.green}`}
+                        >60</p>
+
+                        <p className={classes.metricTitle}>Emisiones directas</p>
+                        <ProgressBar color='first'/>
+
+                        <p className={classes.metricTitle}>Emisiones indirectas</p>
+                        <ProgressBar color='second' />
+
+                        <p className={classes.metricTitle}>Otras emisiones indirectas</p>
+                        <ProgressBar color='third' />
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

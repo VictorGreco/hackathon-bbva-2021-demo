@@ -69,7 +69,7 @@ export default function PrimarySearchAppBar({ setSearch }) {
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
               onChange={(event) => {
-                  setSearch(event.target.value)
+                setSearch(event.target.value)
               }}
             />
           </Search>
