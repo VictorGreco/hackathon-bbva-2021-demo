@@ -37,7 +37,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function ProgressBar({ color }) {
+export default function ProgressBar({ color, number }) {
   const classes = useStyles();
 
   const colorDict = {
@@ -47,6 +47,6 @@ export default function ProgressBar({ color }) {
   }
 
   return (
-      <BorderLinearProgress variant="determinate" value={50} className={colorDict[color]} />
+      <BorderLinearProgress variant="determinate" value={number} className={colorDict[color]} />
   );
 }

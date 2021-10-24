@@ -136,23 +136,23 @@ function Details() {
                         </Grid>
                     </Grid>
                     <Grid item xs={5}>
-                        <p className={classes.metricTitle}>Calificación energética</p>
+                        <p className={classes.metricTitle}>Optimización energética</p>
                         <p
                             className={`${classes.totalScore} ${60 < 50 ?
                                 classes.red :
                                 60 < 100 ?
                                     classes.orange :
                                     classes.green}`}
-                        >60</p>
+                        >60 %</p>
 
                         <p className={classes.metricTitle}>Emisiones directas</p>
-                        <ProgressBar color='first'/>
+                        <ProgressBar color='first' number={60}/>
 
                         <p className={classes.metricTitle}>Emisiones indirectas</p>
-                        <ProgressBar color='second' />
+                        <ProgressBar color='second' number={40} />
 
                         <p className={classes.metricTitle}>Otras emisiones indirectas</p>
-                        <ProgressBar color='third' />
+                        <ProgressBar color='third' number={80} />
                     </Grid>
                 </Grid>
             </Grid>
